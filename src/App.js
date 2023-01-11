@@ -1,22 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import {useSelector,useDispatch} from 'react-redux'
+import TodoList from './redux/components/TodoList';
+import AddTodo from './redux/components/AddTodo';
+import Button from 'react-bootstrap/Button';
+import { filterTodo } from './actions/TodoAction';
 
 function App() {
+
+
+const allTodos = useSelector(state => state.TodoReducer.todos)
+const todoFiltred = useSelector(state=> state.TodoReducer.filter)
+const dispatch = useDispatch()
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <AddTodo/>
+      <Button variant="warning" onClick={()=>dispatch(filterTodo('all'))}>All</Button>{' '}
+      <Button variant="danger"onClick={()=>dispatch(filterTodo(true))}>done</Button>{' '}
+      <Button variant="info"onClick={()=>dispatch(filterTodo(false))}>notdone</Button>{' '}
+      <TodoList allTodos={ todoFiltred ===  'all' ? allTodos : allTodos.filter(el => el.isDone === todoFiltred )}/>
+
+
       </header>
     </div>
   );
